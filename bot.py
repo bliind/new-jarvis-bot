@@ -6,20 +6,21 @@ from discord.ext import commands
 from Cogs.SampleCog import SampleCog
 from Cogs.WikiCog import WikiCog
 from Cogs.MiscCog import MiscCog
+from Cogs.ReactionsCog import ReactionsCog
 
 # extend bot class
 class MyBot(commands.Bot):
-    def __init__(self):
+    def __init__(self, use_cogs):
         intents = discord.Intents.default()
         intents.message_content = True
         intents.members = True
         super().__init__(command_prefix='¤', intents=intents)
         self.synced = False
+        self.use_cogs = use_cogs
 
     async def setup_hook(self):
-        await self.add_cog(SampleCog(self))
-        await self.add_cog(WikiCog(self))
-        await self.add_cog(MiscCog(self))
+        for use_cog in self.use_cogs:
+            await self.add_cog(use_cog(self))
 
     async def on_ready(self):
         if self.synced:
@@ -30,6 +31,12 @@ class MyBot(commands.Bot):
 
         print('Bot ready to go!')
 
-bot = MyBot()
+use_cogs = [
+    SampleCog,
+    MiscCog,
+    WikiCog,
+    ReactionsCog
+]
+bot = MyBot(use_cogs)
 bot.run(os.getenv('BOT_TOKEN'))
 
