@@ -42,6 +42,25 @@ async def get_config(key: str, make_int=False, single=False):
 
     return out
 
+async def get_configs(keys: list):
+    keys_in = ','.join(['?' for key in keys])
+    query = f'SELECT key, value FROM config WHERE key IN ({keys_in})'
+    rows = await sql_query(query, keys)
+    out = {}
+    for row in rows:
+        if row[0] not in out:
+            out[row[0]] = []
+
+        # try to make it int
+        try: out[row[0]].append(int(row[1]))
+        except: out[row[0]].append(row[1])
+
+    # fill any missing keys with an empty list
+    for key in keys:
+        if key not in out:
+            out[key] = []
+
+    return out
 
 # update a specific entry
 async def update_config(id: int, value: str) -> bool:

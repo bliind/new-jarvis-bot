@@ -6,12 +6,18 @@ from discord.ext import commands
 import ConfigDB as config
 
 async def check_caps_percent(message: discord.Message):
-    immune_channels = await config.get_config('caps_prot_immune_channels', make_int=True)
-    if message.channel.id in immune_channels:
+    configs = await config.get_configs([
+        'caps_prot_immune_channels',
+        'caps_prot_immune_roles',
+        'moderator_roles',
+        'caps_prot_percent',
+        'caps_prot_message'
+    ])
+
+    if message.channel.id in configs['caps_prot_immune_channels']:
         return
 
-    immune_roles = await config.get_config('caps_prot_immune_roles', make_int=True)
-    immune_roles += await config.get_config('moderator_roles', make_int=True)
+    immune_roles = configs['caps_prot_immune_roles'] + configs['moderator_roles']
     for role in message.author.roles:
         if role.id in immune_roles:
             return
@@ -19,12 +25,12 @@ async def check_caps_percent(message: discord.Message):
     # remove emotes
     content = re.sub(r':[\w\d]+:', '', message.content)
 
-    max_percent = await config.get_config('caps_prot_percent', make_int=True, single=True)
+    max_percent = configs['caps_prot_percent'][0]
     alph = list(filter(str.isalpha, content))
     if len(alph) >= 5:
         percent = (sum(map(str.isupper, alph)) / len(alph) * 100)
         if percent >= max_percent:
-            msg_content = await config.get_config('caps_prot_message', single=True)
+            msg_content = configs['caps_prot_message'][0]
             try: sent = await message.reply(msg_content)
             except Exception as e:
                 print(e, message)
@@ -40,8 +46,14 @@ class MiscCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
+        if message.author.id == self.bot.user.id:
+            return
+
         await check_caps_percent(message)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
+        if after.author.id == self.bot.user.id:
+            return
+
         await check_caps_percent(after)
