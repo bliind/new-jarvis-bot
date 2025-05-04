@@ -48,3 +48,5 @@ config keys used:
 | member_role | a role granted to members after member_hours hours on the server | MembersCog | y |
 | member_hours | how long after join to grant users member_role | MembersCog | y |
 | auto_publish_channel | channels to auto publish every message | MiscCog |
+| wiki_channel | the wiki channel to auto bump archived threads | WikiCog | y |
+| wiki_link | links to common wiki pages for use with /wiki | WikiCog |

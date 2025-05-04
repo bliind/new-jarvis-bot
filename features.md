@@ -9,11 +9,12 @@ main:
 loops:
 - [x] new account role
 - [x] member role
+- [x] bump archived wiki posts
 
 commands:
 - [ ] post dev reply
 - [ ] ask devs rules
-- [ ] wiki links
+- [x] wiki links
 
 context menu:
 - [ ] post dev reply
