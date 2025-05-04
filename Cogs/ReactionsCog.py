@@ -51,7 +51,10 @@ class ReactionsCog(commands.Cog):
             return
 
         # handle removing certain emotes
-        await self.remove_emotes(payload)
+        try: await self.remove_emotes(payload)
+        except Exception as e:
+            print('Error while removing emotes:')
+            print(e, payload)
 
     @commands.Cog.listener()
     async def on_thread_create(self, thread: discord.Thread):
@@ -59,4 +62,7 @@ class ReactionsCog(commands.Cog):
             return
 
         # handle adding certain emotes to certain threads
-        await self.add_emotes(thread)
+        try: await self.add_emotes(thread)
+        except Exception as e:
+            print('Error while adding emotes:')
+            print(e, thread)

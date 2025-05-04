@@ -49,11 +49,17 @@ class MiscCog(commands.Cog):
         if message.author.id == self.bot.user.id:
             return
 
-        await check_caps_percent(message)
+        try: await check_caps_percent(message)
+        except Exception as e:
+            print('Error checking caps percent:')
+            print(e, message)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
         if after.author.id == self.bot.user.id:
             return
 
-        await check_caps_percent(after)
+        try: await check_caps_percent(after)
+        except Exception as e:
+            print('Error checking caps percent:')
+            print(e, after)
