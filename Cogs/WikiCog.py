@@ -16,4 +16,4 @@ class WikiCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_thread_create(self, thread: discord.Thread):
-        print(thread)
+        pass
