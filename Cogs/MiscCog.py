@@ -10,7 +10,7 @@ class MiscCog(commands.Cog):
         self.bot = bot
 
     async def check_caps_percent(self, message: discord.Message):
-        configs = await config.get_configs([
+        configs = await config.get_configs(message.guild.id, [
             'caps_prot_immune_channels',
             'caps_prot_immune_roles',
             'moderator_roles',

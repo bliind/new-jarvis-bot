@@ -20,16 +20,16 @@ async def sql_query(query, bind=()):
         return False
 
 # create new entry
-async def add_config(key: str, value: str) -> bool:
-    query = 'INSERT INTO config (key, value) VALUES (?, ?)'
-    bind = (key, value)
+async def add_config(server: int, key: str, value: str) -> bool:
+    query = 'INSERT INTO config (server, key, value) VALUES (?, ?)'
+    bind = (server, key, value)
 
     return await sql_query(query, bind)
 
 # read entries with specified key
-async def get_config(key: str, make_int=False, single=False):
-    query = 'SELECT value FROM config WHERE key = ?'
-    bind = (key,)
+async def get_config(server: int, key: str, make_int=False, single=False):
+    query = 'SELECT value FROM config WHERE key = ? AND server = ?'
+    bind = (key, server)
     rows = await sql_query(query, bind)
 
     if make_int:
@@ -42,10 +42,10 @@ async def get_config(key: str, make_int=False, single=False):
 
     return out
 
-async def get_configs(keys: list):
+async def get_configs(server: int, keys: list):
     keys_in = ','.join(['?' for key in keys])
-    query = f'SELECT key, value FROM config WHERE key IN ({keys_in})'
-    rows = await sql_query(query, keys)
+    query = f'SELECT key, value FROM config WHERE key IN ({keys_in}) AND server = ?'
+    rows = await sql_query(query, [*keys, server])
     out = {}
     for row in rows:
         if row[0] not in out:
