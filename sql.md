@@ -9,7 +9,6 @@ CREATE TABLE config (
     server INTEGER,
     key TEXT,
     value TEXT,
-    single INTEGER DEFAULT 0,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     updater TEXT DEFAULT ''
 );
