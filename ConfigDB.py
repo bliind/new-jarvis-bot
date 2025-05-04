@@ -1,5 +1,11 @@
 import aiosqlite
 
+class dotdict(dict):
+    """dot.notation access to dictionary attributes"""
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
 database_file = 'config.db'
 async def sql_query(query, bind=()):
     try:
@@ -42,7 +48,7 @@ async def get_config(server: int, key: str, make_int=False, single=False):
 
     return out
 
-async def get_configs(server: int, keys: list):
+async def get_configs(server: int, keys: list) -> dotdict:
     keys_in = ','.join(['?' for key in keys])
     query = f'SELECT key, value, single FROM config WHERE key IN ({keys_in}) AND server = ?'
     rows = await sql_query(query, [*keys, server])
@@ -65,7 +71,7 @@ async def get_configs(server: int, keys: list):
         if key not in out:
             out[key] = []
 
-    return out
+    return dotdict(out)
 
 # update a specific entry
 async def update_config(id: int, value: str) -> bool:

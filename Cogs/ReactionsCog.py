@@ -17,9 +17,9 @@ class ReactionsCog(commands.Cog):
             'banned_emote',
         ])
 
-        if (payload.channel_id in configs['no_flag_channel'] \
-            and payload.emoji.name in configs['country_flag']) \
-            or payload.emoji.name in configs['banned_emote']:
+        if (payload.channel_id in configs.no_flag_channel \
+            and payload.emoji.name in configs.country_flag) \
+            or payload.emoji.name in configs.banned_emote:
             channel = self.bot.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             await message.clear_reaction(payload.emoji.name)
@@ -33,15 +33,15 @@ class ReactionsCog(commands.Cog):
             'half_react_emote'
         ])
 
-        if thread.parent.id in configs['full_react_channel']:
+        if thread.parent.id in configs.full_react_channel:
             async for message in thread.history(limit=1, oldest_first=True):
-                for emote in configs['full_react_emote']:
+                for emote in configs.full_react_emote:
                     await message.add_reaction(emote)
                     await asyncio.sleep(0.5)
 
-        if thread.parent.id in configs['half_react_channel']:
+        if thread.parent.id in configs.half_react_channel:
             async for message in thread.history(limit=1, oldest_first=True):
-                for emote in configs['half_react_emote']:
+                for emote in configs.half_react_emote:
                     await message.add_reaction(emote)
                     await asyncio.sleep(0.5)
 
@@ -53,15 +53,15 @@ class ReactionsCog(commands.Cog):
             'reaction_role_role'
         ])
 
-        if payload.member.id in configs['reaction_role_users'] \
-        and payload.emoji.name == configs['reaction_role_reaction']:
+        if payload.member.id in configs.reaction_role_users \
+        and payload.emoji.name == configs.reaction_role_reaction:
             channel = self.bot.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             user = await self.bot.fetch_user(payload.user_id)
             # remove the reaction role reaction
             await message.remove_reaction(payload.emoji, user)
             # give the author of the message the role
-            await message.author.add_roles(discord.Object(id=configs['reaction_role_role']))
+            await message.author.add_roles(discord.Object(id=configs.reaction_role_role))
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):

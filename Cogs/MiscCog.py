@@ -18,10 +18,10 @@ class MiscCog(commands.Cog):
             'caps_prot_message'
         ])
 
-        if message.channel.id in configs['caps_prot_immune_channels']:
+        if message.channel.id in configs.caps_prot_immune_channels:
             return
 
-        immune_roles = configs['caps_prot_immune_roles'] + configs['moderator_roles']
+        immune_roles = configs.caps_prot_immune_roles + configs.moderator_roles
         for role in message.author.roles:
             if role.id in immune_roles:
                 return
@@ -29,12 +29,12 @@ class MiscCog(commands.Cog):
         # remove emotes
         content = re.sub(r':[\w\d]+:', '', message.content)
 
-        max_percent = configs['caps_prot_percent']
+        max_percent = configs.caps_prot_percent
         alph = list(filter(str.isalpha, content))
         if len(alph) >= 5:
             percent = (sum(map(str.isupper, alph)) / len(alph) * 100)
             if percent >= max_percent:
-                msg_content = configs['caps_prot_message']
+                msg_content = configs.caps_prot_message
                 try: sent = await message.reply(msg_content)
                 except Exception as e:
                     print(e, message)
