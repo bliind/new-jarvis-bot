@@ -44,3 +44,7 @@ config keys used:
 | reaction_role_users | users who can grant a role with a reaction | ReactionsCog |
 | reaction_role_reaction | the reaction to trigger off of | ReactionsCog | y |
 | reaction_role_role | the role to grant | ReactionsCog | y |
+| new_account_role | a role to give fresh discord accounts | MembersCog | y |
+| new_account_days | how many days old is no longer "fresh" | MembersCog | y |
+| member_role | a role granted to members after member_hours hours on the server | MembersCog | y |
+| member_hours | how long after join to grant users member_role | MembersCog | y |

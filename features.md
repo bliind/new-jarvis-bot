@@ -6,8 +6,12 @@ main:
 - [x] separate like-actions into cogs
 - [x] catch and log errors
 
+loops:
+- [x] new account role
+- [x] member role
+
 on_member_join:
-- [ ] New Account Role
+- [x] New Account Role
 
 on_raw_reaction_add:
 - [x] auto remove 

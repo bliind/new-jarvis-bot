@@ -6,6 +6,7 @@ from discord.ext import commands
 from Cogs.WikiCog import WikiCog
 from Cogs.MiscCog import MiscCog
 from Cogs.ReactionsCog import ReactionsCog
+from Cogs.MemberCog import MemberCog
 
 # extend bot class
 class MyBot(commands.Bot):
@@ -33,7 +34,8 @@ class MyBot(commands.Bot):
 use_cogs = [
     MiscCog,
     WikiCog,
-    ReactionsCog
+    ReactionsCog,
+    MemberCog,
 ]
 bot = MyBot(use_cogs)
 bot.run(os.getenv('BOT_TOKEN'))
