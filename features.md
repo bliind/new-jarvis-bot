@@ -17,7 +17,7 @@ on_raw_reaction_remove:
 - [ ] monitor (still needed?)
 
 on_message:
-- [ ] cheeky me check
+- [x] cheeky me check
 - [x] check caps percent
 - [ ] auto publish
 - [ ] team answers
