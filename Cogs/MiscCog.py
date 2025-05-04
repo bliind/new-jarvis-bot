@@ -29,7 +29,7 @@ class MiscCog(commands.Cog):
                 msg_content = configs.caps_prot_message
                 try: sent = await message.reply(msg_content)
                 except Exception as e:
-                    print(e, message)
+                    print(e, message, sep='\n')
 
                 await message.delete()
                 await asyncio.sleep(5)
@@ -47,7 +47,7 @@ class MiscCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.author.id == self.bot.user.id:
+        if message.author.bot:
             return
 
         # get all configs dealing with new messages
@@ -71,11 +71,11 @@ class MiscCog(commands.Cog):
             try: await method(message, configs)
             except Exception as e:
                 print(f'Failed during {action}:')
-                print(e, message)
+                print(e, message, sep='\n')
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
-        if after.author.id == self.bot.user.id:
+        if after.author.bot:
             return
 
         # get all configs dealing with edited messages
@@ -95,4 +95,4 @@ class MiscCog(commands.Cog):
             try: await method(after, configs)
             except Exception as e:
                 print(f'Failed during {action}:')
-                print(e, after)
+                print(e, after, sep='\n')
