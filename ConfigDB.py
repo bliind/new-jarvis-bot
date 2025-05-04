@@ -44,11 +44,16 @@ async def get_config(server: int, key: str, make_int=False, single=False):
 
 async def get_configs(server: int, keys: list):
     keys_in = ','.join(['?' for key in keys])
-    query = f'SELECT key, value FROM config WHERE key IN ({keys_in}) AND server = ?'
+    query = f'SELECT key, value, single FROM config WHERE key IN ({keys_in}) AND server = ?'
     rows = await sql_query(query, [*keys, server])
     out = {}
     for row in rows:
         if row[0] not in out:
+            if row[2] == 1:
+                try: out[row[0]] = int(row[1])
+                except: out[row[0]] = row[1]
+                continue
+
             out[row[0]] = []
 
         # try to make it int

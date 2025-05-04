@@ -29,12 +29,12 @@ class MiscCog(commands.Cog):
         # remove emotes
         content = re.sub(r':[\w\d]+:', '', message.content)
 
-        max_percent = configs['caps_prot_percent'][0]
+        max_percent = configs['caps_prot_percent']
         alph = list(filter(str.isalpha, content))
         if len(alph) >= 5:
             percent = (sum(map(str.isupper, alph)) / len(alph) * 100)
             if percent >= max_percent:
-                msg_content = configs['caps_prot_message'][0]
+                msg_content = configs['caps_prot_message']
                 try: sent = await message.reply(msg_content)
                 except Exception as e:
                     print(e, message)

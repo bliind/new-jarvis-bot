@@ -54,14 +54,14 @@ class ReactionsCog(commands.Cog):
         ])
 
         if payload.member.id in configs['reaction_role_users'] \
-        and payload.emoji.name in configs['reaction_role_reaction']:
+        and payload.emoji.name == configs['reaction_role_reaction']:
             channel = self.bot.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             user = await self.bot.fetch_user(payload.user_id)
             # remove the reaction role reaction
             await message.remove_reaction(payload.emoji, user)
             # give the author of the message the role
-            await message.author.add_roles(discord.Object(id=configs['reaction_role_role'][0]))
+            await message.author.add_roles(discord.Object(id=configs['reaction_role_role']))
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
