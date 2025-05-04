@@ -9,15 +9,7 @@ class MiscCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    async def check_caps_percent(self, message: discord.Message):
-        configs = await config.get_configs(message.guild.id, [
-            'caps_prot_immune_channels',
-            'caps_prot_immune_roles',
-            'moderator_roles',
-            'caps_prot_percent',
-            'caps_prot_message'
-        ])
-
+    async def check_caps_percent(self, message: discord.Message, configs: config.dotdict):
         if message.channel.id in configs.caps_prot_immune_channels:
             return
 
@@ -44,16 +36,12 @@ class MiscCog(commands.Cog):
                 try: await sent.delete()
                 except: pass
 
-    async def cheeky_me_check(self, message: discord.Message):
+    async def cheeky_me_check(self, message: discord.Message, configs: config.dotdict):
         if self.bot.user.mentioned_in(message):
             if message.author.id == 145971157902950401:
                 await message.reply('At your service, sir.')
 
-    async def auto_publish(self, message: discord.Message):
-        configs = await config.get_configs(message.guild.id, [
-            'auto_publish_channels',
-        ])
-
+    async def auto_publish(self, message: discord.Message, configs: config.dotdict):
         if message.channel.id in configs.auto_publish_channels:
             await message.publish()
 
@@ -62,31 +50,49 @@ class MiscCog(commands.Cog):
         if message.author.id == self.bot.user.id:
             return
 
-        # check if it's me pinging the bot
-        try: await self.cheeky_me_check(message)
-        except Exception as e:
-            print('Failed cheeky me check?')
-            print(e, message)
+        # get all configs dealing with new messages
+        configs = await config.get_configs(message.guild.id, [
+            'moderator_roles',
+            'auto_publish_channels',
+            'caps_prot_immune_channels',
+            'caps_prot_immune_roles',
+            'caps_prot_percent',
+            'caps_prot_message',
+        ])
 
-        # check for all caps / mostly caps message
-        try: await self.check_caps_percent(message)
-        except Exception as e:
-            print('Error checking caps percent:')
-            print(e, message)
+        actions = [
+            'cheeky_me_check',
+            'check_caps_percent',
+            'auto_publish',
+        ]
 
-        # auto publish messages to announcement channels
-        try: await self.auto_publish(message)
-        except Exception as e:
-            print('Error trying auto publish:')
-            print(e, message)
+        for action in actions:
+            method = getattr(self, action)
+            try: await method(message, configs)
+            except Exception as e:
+                print(f'Failed during {action}:')
+                print(e, message)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
         if after.author.id == self.bot.user.id:
             return
 
-        # check for all caps / mostly caps message
-        try: await self.check_caps_percent(after)
-        except Exception as e:
-            print('Error checking caps percent:')
-            print(e, after)
+        # get all configs dealing with edited messages
+        configs = await config.get_configs(after.guild.id, [
+            'caps_prot_immune_channels',
+            'caps_prot_immune_roles',
+            'caps_prot_percent',
+            'caps_prot_message',
+        ])
+
+        actions = [
+            'check_caps_percent',
+        ]
+
+        for action in actions:
+            method = getattr(self, action)
+            try: await method(after, configs)
+            except Exception as e:
+                print(f'Failed during {action}:')
+                print(e, after)
