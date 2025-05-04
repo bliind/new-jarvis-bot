@@ -38,7 +38,7 @@ on_message:
 - [x] check caps percent
 - [x] auto publish
 - [x] team answers
-- [ ] moderator tag ask-the-team
+- [x] moderator tag ask-the-team
 
 on_message_delete:
 - [ ] team answers
