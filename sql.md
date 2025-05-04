@@ -22,20 +22,25 @@ BEGIN
 END;
 ```
 
+---
+
 config keys used:
 (roles and channels are IDs)
 (emotes are also IDs unless they are standard emoji)
-| key | description |
-| --- | --- |
-| moderator_role | moderator roles |
-| caps_prot_immune_channels | channels where caps aren't checked |
-| caps_prot_immune_role | roles who don't have caps checked |
-| caps_prot_message | message to users who use too many caps |
-| caps_prot_percent | percentage of message that has to be caps to catch |
-| country_flag | all country flags for banning from no_flag_channel |
-| no_flag_channel | channels to not allow country flag reactions |
-| banned_emote | emotes to automatically remove |
-| full_react_channel | forum channels where new threads should get all forum reacts |
-| full_react_emote | emotes to react to new threads in full_react_channels |
-| half_react_channel | forum channels to receive half forum reacts |
-| half_react_emote | emotes to react to new thread in half_react_channels |
+| key | description | used by | single (no unless marked) |
+| --- | --- | --- | --- |
+| moderator_role | moderator roles | MiscCog |
+| caps_prot_immune_channel | channels where caps aren't checked | MiscCog |
+| caps_prot_immune_role | roles who don't have caps checked | MiscCog |
+| caps_prot_message | message to users who use too many caps | MiscCog | y |
+| caps_prot_percent | percentage of message that has to be caps to catch | MiscCog | y |
+| country_flag | all country flags for banning from no_flag_channel | ReactionsCog |
+| no_flag_channel | channels to not allow country flag reactions | ReactionsCog |
+| banned_emote | emotes to automatically remove | ReactionsCog |
+| full_react_channel | forum channels where new threads should get all forum reacts | ReactionsCog |
+| full_react_emote | emotes to react to new threads in full_react_channels | ReactionsCog |
+| half_react_channel | forum channels to receive half forum reacts | ReactionsCog |
+| half_react_emote | emotes to react to new thread in half_react_channels | ReactionsCog |
+| reaction_role_users | users who can grant a role with a reaction | ReactionsCog |
+| reaction_role_reaction | the reaction to trigger off of | ReactionsCog | y |
+| reaction_role_role | the role to grant | ReactionsCog | y |

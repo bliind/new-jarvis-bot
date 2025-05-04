@@ -1,5 +1,10 @@
-## todo list
+## feature / todo list
 ### if it's not checked it still needs ported
+
+main:
+- [x] use database for all config
+- [x] separate like-actions into cogs
+- [x] catch and log errors
 
 on_member_join:
 - [ ] New Account Role
@@ -7,7 +12,7 @@ on_member_join:
 on_raw_reaction_add:
 - [x] auto remove 
 - [ ] monitor (still needed?)
-- [ ] reaction role
+- [x] reaction role
 - [ ] auto remove plusses from kanzi ban thing (not needed)
 
 on_scheduled_event_create:
