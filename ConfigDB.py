@@ -27,7 +27,7 @@ async def sql_query(query, bind=()):
 
 # create new entry
 async def add_config(server: int, key: str, value: str) -> bool:
-    query = 'INSERT INTO config (server, key, value) VALUES (?, ?)'
+    query = 'INSERT INTO config (server, key, value) VALUES (?, ?, ?)'
     bind = (server, key, value)
 
     return await sql_query(query, bind)
@@ -75,15 +75,22 @@ async def get_configs(server: int, keys: list) -> dotdict:
     return dotdict(out)
 
 # update a specific entry
-async def update_config(id: int, value: str) -> bool:
-    query = 'UPDATE config SET value = ? WHERE id = ?'
-    bind = (value, id)
+async def update_config(server: int, key: str, value: str) -> bool:
+    query = 'UPDATE config SET value = ? WHERE server = ? AND key = ?'
+    bind = (value, server, key)
 
     return await sql_query(query, bind)
 
 # delete a specific entry
-async def delete_config(id: int) -> bool:
-    query = 'DELETE FROM config WHERE id = ?'
-    bind = (id,)
+async def delete_config(server: int, key: str, value: str) -> bool:
+    query = 'DELETE FROM config WHERE server = ? AND key = ? AND value = ?'
+    bind = (server, key, value)
 
     return await sql_query(query, bind)
+
+async def get_distinct_keys(server: int):
+    query = 'SELECT DISTINCT key FROM config WHERE server = ?'
+    bind = (server,)
+
+    rows = await sql_query(query, bind)
+    return [r[0] for r in rows]
