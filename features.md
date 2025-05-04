@@ -37,7 +37,7 @@ on_message:
 - [x] cheeky me check
 - [x] check caps percent
 - [x] auto publish
-- [ ] team answers
+- [x] team answers
 - [ ] moderator tag ask-the-team
 
 on_message_delete:
