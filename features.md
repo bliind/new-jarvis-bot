@@ -15,9 +15,8 @@ on_member_join:
 
 on_raw_reaction_add:
 - [x] auto remove 
-- [ ] monitor (still needed?)
 - [x] reaction role
-- [ ] auto remove plusses from kanzi ban thing (not needed)
+- [ ] monitor (still needed?)
 
 on_scheduled_event_create:
 - [ ] add event ID to automod whitelist

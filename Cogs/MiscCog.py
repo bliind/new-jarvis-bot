@@ -6,7 +6,7 @@ from discord.ext import commands
 import ConfigDB as config
 
 class MiscCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     async def check_caps_percent(self, message: discord.Message):
