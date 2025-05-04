@@ -51,10 +51,10 @@ class MiscCog(commands.Cog):
 
     async def auto_publish(self, message: discord.Message):
         configs = await config.get_configs(message.guild.id, [
-            'auto_publish_channel',
+            'auto_publish_channels',
         ])
 
-        if message.channel.id in configs.auto_publish_channel:
+        if message.channel.id in configs.auto_publish_channels:
             await message.publish()
 
     @commands.Cog.listener()

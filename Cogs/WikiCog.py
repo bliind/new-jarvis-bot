@@ -31,10 +31,10 @@ class WikiCog(commands.Cog):
     @app_commands.command(name='wiki', description='Links to common wiki pages')
     async def wiki_command(self, interaction: discord.Interaction, page: str, ping: discord.User = None):
         await interaction.response.defer(ephemeral=False)
-        configs = await config.get_configs(interaction.guild_id, ['wiki_link'])
+        configs = await config.get_configs(interaction.guild_id, ['wiki_links'])
 
         wiki_links = {}
-        for link in configs.wiki_link:
+        for link in configs.wiki_links:
             title, url = link.split('|')
             wiki_links[title] = url
         message = f'{ping.mention if ping else ""} {wiki_links[page]}'
@@ -42,10 +42,10 @@ class WikiCog(commands.Cog):
     
     @wiki_command.autocomplete('page')
     async def auto_complete_wiki_page(self, interaction: discord.Interaction, current: str):
-        configs = await config.get_configs(interaction.guild_id, ['wiki_link'])
+        configs = await config.get_configs(interaction.guild_id, ['wiki_links'])
 
         out = []
-        for link in configs.wiki_link:
+        for link in configs.wiki_links:
             title, _ = link.split('|')
             if title.lower().startswith(current.lower()):
                 out.append(app_commands.Choice(name=title, value=title))
