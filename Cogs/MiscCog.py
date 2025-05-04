@@ -49,6 +49,14 @@ class MiscCog(commands.Cog):
             if message.author.id == 145971157902950401:
                 await message.reply('At your service, sir.')
 
+    async def auto_publish(self, message: discord.Message):
+        configs = await config.get_configs(message.guild.id, [
+            'auto_publish_channel',
+        ])
+
+        if message.channel.id in configs.auto_publish_channel:
+            await message.publish()
+
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author.id == self.bot.user.id:
@@ -64,6 +72,12 @@ class MiscCog(commands.Cog):
         try: await self.check_caps_percent(message)
         except Exception as e:
             print('Error checking caps percent:')
+            print(e, message)
+
+        # auto publish messages to announcement channels
+        try: await self.auto_publish(message)
+        except Exception as e:
+            print('Error trying auto publish:')
             print(e, message)
 
     @commands.Cog.listener()

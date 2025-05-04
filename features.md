@@ -10,6 +10,14 @@ loops:
 - [x] new account role
 - [x] member role
 
+commands:
+- [ ] post dev reply
+- [ ] ask devs rules
+- [ ] wiki links
+
+context menu:
+- [ ] post dev reply
+
 on_member_join:
 - [x] New Account Role
 
@@ -27,7 +35,7 @@ on_raw_reaction_remove:
 on_message:
 - [x] cheeky me check
 - [x] check caps percent
-- [ ] auto publish
+- [x] auto publish
 - [ ] team answers
 - [ ] moderator tag ask-the-team
 

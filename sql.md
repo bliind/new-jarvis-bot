@@ -48,3 +48,4 @@ config keys used:
 | new_account_days | how many days old is no longer "fresh" | MembersCog | y |
 | member_role | a role granted to members after member_hours hours on the server | MembersCog | y |
 | member_hours | how long after join to grant users member_role | MembersCog | y |
+| auto_publish_channel | channels to auto publish every message | MiscCog |
