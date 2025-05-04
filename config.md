@@ -11,6 +11,7 @@ _plural key name means multiple entries_
 | caps_prot_immune_roles | roles who don't have caps checked | MiscCog |
 | caps_prot_message | message to users who use too many caps | MiscCog |
 | caps_prot_percent | percentage of message that has to be caps to catch | MiscCog |
+| auto_publish_channels | channels to auto publish every message | MiscCog |
 | no_flag_channels | channels to not allow country flag reactions | ReactionsCog |
 | banned_emotes | emotes to automatically remove | ReactionsCog |
 | full_react_channels | forum channels where new threads should get all forum reacts | ReactionsCog |
@@ -20,13 +21,12 @@ _plural key name means multiple entries_
 | reaction_role_users | users who can grant a role with a reaction | ReactionsCog |
 | reaction_role_reaction | the reaction to trigger off of | ReactionsCog |
 | reaction_role_role | the role to grant | ReactionsCog |
+| wiki_channel | the wiki channel to auto bump archived threads | WikiCog |
+| wiki_links | links to common wiki pages for use with /wiki | WikiCog |
 | new_account_role | a role to give fresh discord accounts | MembersCog |
 | new_account_day_count | how many days old is no longer "fresh" | MembersCog |
 | member_role | a role granted to members after member_hours hours on the server | MembersCog |
 | member_hour_count | how long after join to grant users member_role | MembersCog |
-| auto_publish_channels | channels to auto publish every message | MiscCog |
-| wiki_channel | the wiki channel to auto bump archived threads | WikiCog |
-| wiki_links | links to common wiki pages for use with /wiki | WikiCog |
 | developer_roles | developer roles | TeamAnswersCog |
 | team_answer_channel | the channel to post the devreply posts | TeamAnswersCog |
 | team_question_channels | the channels to monitor for dev replies | TeamAnswersCog |
