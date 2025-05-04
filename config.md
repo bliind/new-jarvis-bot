@@ -3,7 +3,7 @@ what they are and what they do
 
 _roles and channels are IDs_
 
-_plural key name means multiple entries_
+_singular key name means only one entry_
 
 | key | description | used by |
 | --- | --- | --- |
