@@ -28,3 +28,7 @@ _plural key name means multiple entries_
 | wiki_channel | the wiki channel to auto bump archived threads | WikiCog |
 | wiki_links | links to common wiki pages for use with /wiki | WikiCog |
 | developer_roles | developer roles | TeamAnswersCog |
+| team_answer_channel | the channel to post the devreply posts | TeamAnswersCog |
+| team_question_channels | the channels to monitor for dev replies | TeamAnswersCog |
+| team_response_tag | the forum tag to apply to answered posts | TeamAnswersCog |
+| moderator_response_tag | the forum tag to apply when a mod responds in team_answer_channel | TeamAnswersCog |
