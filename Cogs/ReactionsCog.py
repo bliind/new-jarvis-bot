@@ -1,4 +1,4 @@
-import re
+import json
 import asyncio
 import discord
 from discord import app_commands
@@ -8,17 +8,18 @@ import ConfigDB as config
 class ReactionsCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        with open('country_flags.json', 'r', encoding='utf-8') as s:
+            self.country_flags = json.load(s)
 
     async def remove_emotes(self, payload: discord.RawReactionActionEvent):
         # handles removing certain emotes
         configs = await config.get_configs(payload.guild_id, [
-            'country_flag',
             'no_flag_channel',
             'banned_emote',
         ])
 
         if (payload.channel_id in configs.no_flag_channel \
-            and payload.emoji.name in configs.country_flag) \
+            and payload.emoji.name in self.country_flags) \
             or payload.emoji.name in configs.banned_emote:
             channel = self.bot.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)

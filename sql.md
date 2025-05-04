@@ -34,7 +34,6 @@ config keys used:
 | caps_prot_immune_role | roles who don't have caps checked | MiscCog |
 | caps_prot_message | message to users who use too many caps | MiscCog | y |
 | caps_prot_percent | percentage of message that has to be caps to catch | MiscCog | y |
-| country_flag | all country flags for banning from no_flag_channel | ReactionsCog |
 | no_flag_channel | channels to not allow country flag reactions | ReactionsCog |
 | banned_emote | emotes to automatically remove | ReactionsCog |
 | full_react_channel | forum channels where new threads should get all forum reacts | ReactionsCog |
