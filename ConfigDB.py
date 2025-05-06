@@ -104,7 +104,6 @@ async def get_all_configs(server = None):
 
     return out
 
-
 # update a specific entry
 async def update_config(server: int, key: str, value: str) -> bool:
     query = 'UPDATE config SET value = ? WHERE server = ? AND key = ?'

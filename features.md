@@ -31,7 +31,7 @@ on_raw_reaction_add:
 - [ ] monitor (still needed?)
 
 on_scheduled_event_create:
-- [x] add event ID to automod whitelist
+- [x] add event ID to automod whitelist - EventCog
 
 on_raw_reaction_remove:
 - [ ] monitor (still needed?)
@@ -51,7 +51,7 @@ on_message_edit:
 - [x] team answers - TeamAnswersCog
 
 on_thread_create:
-- [ ] LFG post checker - ForumCog
+- [x] LFG post checker - ForumCog
 - [x] auto pin - ForumCog
 - [x] add reactions (full/half) - ReactionsCog
 

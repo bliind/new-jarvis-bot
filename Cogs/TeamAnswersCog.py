@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from Views.ConfirmView import ConfirmView
-from Modals.AskDevsModal import AskDevsModal
+from Modals.ConfigParagraphModal import ConfigParagraphModal
 import ConfigDB
 
 class TeamAnswersCog(commands.Cog):
@@ -200,10 +200,12 @@ class TeamAnswersCog(commands.Cog):
     async def update_askdevs_command(self, interaction: discord.Interaction):
         configs = self.bot.config[interaction.guild.id]
 
-        modal = AskDevsModal(configs.askdevs_message)
+        modal = ConfigParagraphModal(configs.askdevs_message)
         await interaction.response.send_modal(modal)
         await modal.wait()
         if await ConfigDB.update_config(interaction.guild.id, 'askdevs_message', modal.new_message.value):
+            # update live config
+            self.bot.config[interaction.guild.id]['askdevs_message'] = modal.new_message.value
             await interaction.followup.send('ask-the-team Guidelines Updated', ephemeral=True)
 
     ###

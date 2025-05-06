@@ -37,3 +37,5 @@ _singular key name means only one entry_
 | automod_links_name | the name of the automod rule that blocks (discord) links | EventCog |
 | auto_pin_channels | channels to automatically pin the OP upon creation | ForumCog |
 | alliance_channels | forum channels to check post formatting | ForumCog |
+| alliance_post_regexes | regexes to check if exist in a new alliance post. all must succeed | ForumCog
+| alliance_post_message | the message to send to an improperly formatted alliance post | ForumCog
