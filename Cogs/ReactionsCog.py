@@ -67,9 +67,6 @@ class ReactionsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_thread_create(self, thread: discord.Thread):
-        if thread.owner_id == self.bot.user.id:
-            return
-
         # handle adding certain emotes to certain threads
         try: await self.add_emotes(thread)
         except Exception as e:

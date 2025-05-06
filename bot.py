@@ -3,13 +3,14 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from Cogs.WikiCog import WikiCog
 from Cogs.MiscCog import MiscCog
-from Cogs.ReactionsCog import ReactionsCog
-from Cogs.MemberCog import MemberCog
-from Cogs.TeamAnswersCog import TeamAnswersCog
-from Cogs.ConfigCog import ConfigCog
+from Cogs.WikiCog import WikiCog
 from Cogs.EventCog import EventCog
+from Cogs.ForumCog import ForumCog
+from Cogs.ConfigCog import ConfigCog
+from Cogs.MemberCog import MemberCog
+from Cogs.ReactionsCog import ReactionsCog
+from Cogs.TeamAnswersCog import TeamAnswersCog
 
 import ConfigDB
 
@@ -41,11 +42,12 @@ class MyBot(commands.Bot):
 use_cogs = [
     MiscCog,
     WikiCog,
-    ReactionsCog,
-    MemberCog,
-    TeamAnswersCog,
-    ConfigCog,
     EventCog,
+    ForumCog,
+    ConfigCog,
+    MemberCog,
+    ReactionsCog,
+    TeamAnswersCog,
 ]
 bot = MyBot(use_cogs)
 bot.run(os.getenv('BOT_TOKEN'))

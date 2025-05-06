@@ -3,3 +3,4 @@
 **/*.db
 **/*.sql
 debug.py
+clear_commands.py

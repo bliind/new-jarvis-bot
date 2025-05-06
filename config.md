@@ -35,3 +35,5 @@ _singular key name means only one entry_
 | moderator_response_tag | the forum tag to apply when a mod responds in a team_question_channels | TeamAnswersCog |
 | askdevs_message | The message of the ask-the-team guidelines to post with /askdevs | TeamAnswersCog |
 | automod_links_name | the name of the automod rule that blocks (discord) links | EventCog |
+| auto_pin_channels | channels to automatically pin the OP upon creation | ForumCog |
+| alliance_channels | forum channels to check post formatting | ForumCog |
