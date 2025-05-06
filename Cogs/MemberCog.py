@@ -3,7 +3,6 @@ import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
-import ConfigDB as config
 
 def check_member_age(member: discord.Member, new_account_day_count: int):
     now = datetime.datetime.now(datetime.timezone.utc)
@@ -31,10 +30,7 @@ class MemberCog(commands.Cog):
     @tasks.loop(seconds=3600)
     async def check_mute_roles(self):
         for server in self.bot.guilds:
-            configs = await config.get_configs(server.id, [
-                'new_account_role',
-                'new_account_day_count',
-            ])
+            configs = self.bot.config[server.id]
 
             try:
                 role = server.get_role(configs.new_account_role)
@@ -52,11 +48,7 @@ class MemberCog(commands.Cog):
     @tasks.loop(seconds=3600)
     async def check_member_roles(self):
         for server in self.bot.guilds:
-            configs = await config.get_configs(server.id, [
-                'new_account_role',
-                'member_role',
-                'member_hour_count'
-            ])
+            configs = self.bot.config[server.id]
 
             try:
                 role = server.get_role(configs.member_role)
@@ -75,10 +67,7 @@ class MemberCog(commands.Cog):
                 except: pass
 
     async def check_new_member_age(self, member: discord.Member):
-        configs = await config.get_configs(member.guild.id, [
-            'new_account_role',
-            'new_account_day_count',
-        ])
+        configs = self.bot.config[member.guild.id]
 
         if not check_member_age(member, configs.new_account_day_count):
             role = member.guild.get_role(configs.new_account_role)

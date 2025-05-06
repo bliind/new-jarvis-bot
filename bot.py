@@ -40,12 +40,12 @@ class MyBot(commands.Bot):
 
 use_cogs = [
     MiscCog,
-    # WikiCog,
-    # ReactionsCog,
-    # MemberCog,
-    # TeamAnswersCog,
+    WikiCog,
+    ReactionsCog,
+    MemberCog,
+    TeamAnswersCog,
     ConfigCog,
-    # EventCog,
+    EventCog,
 ]
 bot = MyBot(use_cogs)
 bot.run(os.getenv('BOT_TOKEN'))
