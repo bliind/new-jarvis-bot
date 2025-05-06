@@ -1,7 +1,6 @@
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
-import ConfigDB as config
 
 class WikiCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -14,9 +13,7 @@ class WikiCog(commands.Cog):
     @tasks.loop(seconds=3600)
     async def bump_archived_wiki_posts(self):
         for server in self.bot.guilds:
-            configs = await config.get_configs(server.id, [
-                'wiki_channel',
-            ])
+            configs = self.bot.config[server.id]
 
             try:
                 forum = self.bot.get_channel(configs.wiki_channel)
@@ -31,7 +28,7 @@ class WikiCog(commands.Cog):
     @app_commands.command(name='wiki', description='Links to common wiki pages')
     async def wiki_command(self, interaction: discord.Interaction, page: str, ping: discord.User = None):
         await interaction.response.defer(ephemeral=False)
-        configs = await config.get_configs(interaction.guild_id, ['wiki_links'])
+        configs = self.bot.config[interaction.guild.id]
 
         wiki_links = {}
         for link in configs.wiki_links:
@@ -39,10 +36,10 @@ class WikiCog(commands.Cog):
             wiki_links[title] = url
         message = f'{ping.mention if ping else ""} {wiki_links[page]}'
         await interaction.followup.send(message)
-    
+
     @wiki_command.autocomplete('page')
     async def auto_complete_wiki_page(self, interaction: discord.Interaction, current: str):
-        configs = await config.get_configs(interaction.guild_id, ['wiki_links'])
+        configs = self.bot.config[interaction.guild.id]
 
         out = []
         for link in configs.wiki_links:

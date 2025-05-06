@@ -3,7 +3,6 @@ import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands
-import ConfigDB as config
 
 class ReactionsCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -11,7 +10,9 @@ class ReactionsCog(commands.Cog):
         with open('country_flags.json', 'r', encoding='utf-8') as s:
             self.country_flags = json.load(s)
 
-    async def remove_emotes(self, payload: discord.RawReactionActionEvent, configs: config.dotdict):
+    async def remove_emotes(self, payload: discord.RawReactionActionEvent):
+        configs = self.bot.config[payload.guild_id]
+
         if (payload.channel_id in configs.no_flag_channels \
             and payload.emoji.name in self.country_flags) \
             or payload.emoji.name in configs.banned_emotes:
@@ -19,7 +20,9 @@ class ReactionsCog(commands.Cog):
             message = await channel.fetch_message(payload.message_id)
             await message.clear_reaction(payload.emoji.name)
 
-    async def add_emotes(self, thread: discord.Thread, configs: config.dotdict):
+    async def add_emotes(self, thread: discord.Thread):
+        configs = self.bot.config[thread.guild.id]
+
         if thread.parent.id in configs.full_react_channels:
             async for message in thread.history(limit=1, oldest_first=True):
                 for emote in configs.full_react_emotes:
@@ -32,7 +35,9 @@ class ReactionsCog(commands.Cog):
                     await message.add_reaction(emote)
                     await asyncio.sleep(0.5)
 
-    async def reaction_role(self, payload: discord.RawReactionActionEvent, configs: config.dotdict):
+    async def reaction_role(self, payload: discord.RawReactionActionEvent):
+        configs = self.bot.config[payload.guild_id]
+
         if payload.member.id in configs.reaction_role_users \
         and payload.emoji.name == configs.reaction_role_reaction:
             channel = self.bot.get_channel(payload.channel_id)
@@ -48,23 +53,14 @@ class ReactionsCog(commands.Cog):
         if payload.member.id == self.bot.user.id:
             return
 
-        # get all configs dealing with reaction adding
-        configs = await config.get_configs(payload.guild_id, [
-            'no_flag_channels',
-            'banned_emotes',
-            'reaction_role_users',
-            'reaction_role_reaction',
-            'reaction_role_role',
-        ])
-
         # handle removing certain emotes
-        try: await self.remove_emotes(payload, configs)
+        try: await self.remove_emotes(payload)
         except Exception as e:
             print('Error while removing emotes:')
             print(e, payload)
 
         # check for ReactionRole
-        try: await self.reaction_role(payload, configs)
+        try: await self.reaction_role(payload)
         except Exception as e:
             print('Error while checking reaction role:')
             print(e, payload)
@@ -74,16 +70,8 @@ class ReactionsCog(commands.Cog):
         if thread.owner_id == self.bot.user.id:
             return
 
-        # get all configs dealing with thread creation
-        configs = await config.get_configs(thread.guild.id, [
-            'full_react_channels',
-            'half_react_channels',
-            'full_react_emotes',
-            'half_react_emotes'
-        ])
-
         # handle adding certain emotes to certain threads
-        try: await self.add_emotes(thread, configs)
+        try: await self.add_emotes(thread)
         except Exception as e:
             print('Error while adding emotes:')
             print(e, thread)
