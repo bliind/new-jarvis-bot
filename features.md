@@ -52,7 +52,6 @@ on_message_edit:
 
 on_thread_create:
 - [ ] LFG post checker - ForumCog
-- [ ] support post auto reply - ForumCog
 - [ ] auto pin - ForumCog
 - [x] add reactions (full/half) - ReactionsCog
 
