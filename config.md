@@ -26,12 +26,12 @@ _singular key name means only one entry_
 | wiki_links | links to common wiki pages for use with /wiki | WikiCog |
 | new_account_role | a role to give fresh discord accounts | MembersCog |
 | new_account_day_count | how many days old is no longer "fresh" | MembersCog |
-| member_role | a role granted to members after member_hours hours on the server | MembersCog |
+| member_role | a role granted to members after member_hour_count hours on the server | MembersCog |
 | member_hour_count | how long after join to grant users member_role | MembersCog |
 | developer_roles | developer roles | TeamAnswersCog |
 | team_answer_channel | the channel to post the devreply posts | TeamAnswersCog |
 | team_question_channels | the channels to monitor for dev replies | TeamAnswersCog |
 | team_response_tag | the forum tag to apply to answered posts | TeamAnswersCog |
-| moderator_response_tag | the forum tag to apply when a mod responds in team_answer_channel | TeamAnswersCog |
+| moderator_response_tag | the forum tag to apply when a mod responds in a team_question_channels | TeamAnswersCog |
 | askdevs_message | The message of the ask-the-team guidelines to post with /askdevs | TeamAnswersCog |
 | automod_links_name | the name of the automod rule that blocks (discord) links | EventCog |
