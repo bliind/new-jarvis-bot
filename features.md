@@ -15,12 +15,12 @@ loops:
 - [x] bump archived wiki posts - WikiCog
 
 commands:
-- [ ] ask devs rules
+- [x] ask devs rules - TeamAnswersCog
 - [x] wiki links - WikiCog
 - [ ] post dev reply (not needed - contextmenu infinitely better)
 
 context menu:
-- [x] post dev reply
+- [x] post dev reply - TeamAnswersCog
 
 on_member_join:
 - [x] New Account Role - MemberCog
@@ -44,16 +44,16 @@ on_message:
 - [x] moderator tag ask-the-team - TeamAnswersCog
 
 on_message_delete:
-- [x] team answers
+- [x] team answers - TeamAnswersCog
 
 on_message_edit:
 - [x] check caps percent - MiscCog
-- [x] team answers
+- [x] team answers - TeamAnswersCog
 
 on_thread_create:
-- [ ] LFG post checker
-- [ ] support post auto reply
-- [ ] auto pin
+- [ ] LFG post checker - ForumCog
+- [ ] support post auto reply - ForumCog
+- [ ] auto pin - ForumCog
 - [x] add reactions (full/half) - ReactionsCog
 
 on_member_update:

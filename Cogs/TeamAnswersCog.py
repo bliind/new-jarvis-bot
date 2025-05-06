@@ -4,6 +4,7 @@ from discord.ext import commands
 import ConfigDB as config
 
 from Views.ConfirmView import ConfirmView
+from Modals.AskDevsModal import AskDevsModal
 
 class TeamAnswersCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -192,6 +193,28 @@ class TeamAnswersCog(commands.Cog):
         except Exception as e:
             print(f'Failed during delete_devreply:')
             print(e, message, sep='\n')
+
+    ###
+    ### Slash Command
+    @app_commands.command(name='askdevs', description='Post the ask-the-team guidelines')
+    async def askdevs_command(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=False)
+        configs = await config.get_configs(interaction.guild_id, ['askdevs_message'])
+        embed = discord.Embed(
+            colour=discord.Color.yellow(),
+            description=configs.askdevs_message
+        )
+        await interaction.channel.send(embed=embed)
+        await interaction.delete_original_response()
+
+    @app_commands.command(name='update_askdevs', description='Update the ask-the-team guidelines')
+    async def update_askdevs_command(self, interaction: discord.Interaction):
+        configs = await config.get_configs(interaction.guild_id, ['askdevs_message'])
+        modal = AskDevsModal(configs.askdevs_message)
+        await interaction.response.send_modal(modal)
+        await modal.wait()
+        if await config.update_config(interaction.guild.id, 'askdevs_message', modal.new_message.value):
+            await interaction.followup.send('ask-the-team Guidelines Updated', ephemeral=True)
 
     ###
     ### Context Menu
