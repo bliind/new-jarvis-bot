@@ -3,10 +3,18 @@ from discord import app_commands
 from discord.ext import commands
 import ConfigDB as config
 
+from Views.ConfirmView import ConfirmView
+
 class TeamAnswersCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.configs = {}
+
+        # silly way to do context menus if you ask me but hey
+        devreply_contextmenu = app_commands.ContextMenu(
+            name='Post Dev Reply',
+            callback=self.post_devreply_contextmenu
+        )
+        self.bot.tree.add_command(devreply_contextmenu)
 
     def is_message_devreply(self, message: discord.Message, configs: config.dotdict):
         # make sure is our forum and developer is replying
@@ -58,6 +66,8 @@ class TeamAnswersCog(commands.Cog):
         sent = await output_channel.send(embed=embed)
         await sent.publish()
 
+        return sent
+
     async def get_thread_open(self, message):
         # get the original message in the thread the dev is posting on
         forum = self.bot.get_channel(message.channel.parent.id)
@@ -78,6 +88,7 @@ class TeamAnswersCog(commands.Cog):
             except: pass
 
     ###
+    ### The actual actions
 
     async def post_new_devreply(self, message: discord.Message, configs: config.dotdict):
         if not self.is_message_devreply(message, configs):
@@ -180,4 +191,45 @@ class TeamAnswersCog(commands.Cog):
         try: await self.delete_devreply(message, configs)
         except Exception as e:
             print(f'Failed during delete_devreply:')
+            print(e, message, sep='\n')
+
+    ###
+    ### Context Menu
+    async def post_devreply_contextmenu(self, interaction: discord.Interaction, message: discord.Message):
+        await interaction.response.defer(ephemeral=True)
+        # ensure message is in a forum
+        if not (message.channel.type == discord.ChannelType.public_thread and \
+                message.channel.parent.type == discord.ChannelType.forum):
+            await interaction.edit_original_response(content='Message is not in a forum thread')
+            return
+
+        try:
+            configs = await config.get_configs(interaction.guild_id, [
+                'developer_roles',
+                'team_answer_channel',
+                'team_question_channels',
+            ])
+
+            if not self.is_message_devreply(message, configs):
+                await interaction.edit_original_response(content='Message is not from a dev')
+                return
+
+            _, thread_open = await self.get_thread_open(message)
+            # post confirm message then do the thing
+            confirm_view = ConfirmView(timeout=10)
+            confirm_embed = discord.Embed(title='Post Reply?', description=message.content)
+            await interaction.edit_original_response(embed=confirm_embed, view=confirm_view)
+            await confirm_view.wait()
+            if confirm_view.value:
+                # yes was picked
+                sent = await self.send_devreply_embed(message, thread_open, configs)
+                await interaction.edit_original_response(content=f'## Posted: {sent.jump_url}', view=None)
+            elif confirm_view.value == None:
+                # timeout
+                await interaction.edit_original_response(content='## Timed out.', view=None)
+            else:
+                # no chosen
+                await interaction.edit_original_response(content='## Cancelled!', view=None)
+        except Exception as e:
+            print('Failed doing Post Dev Reply context menu:')
             print(e, message, sep='\n')

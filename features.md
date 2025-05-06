@@ -7,7 +7,7 @@ main:
 - [x] catch and log errors
 
 new:
-- [ ] commands to change config - ConfigCog
+- [x] commands to change config - ConfigCog
 
 loops:
 - [x] new account role - MemberCog
@@ -15,12 +15,12 @@ loops:
 - [x] bump archived wiki posts - WikiCog
 
 commands:
-- [ ] post dev reply
 - [ ] ask devs rules
 - [x] wiki links - WikiCog
+- [ ] post dev reply (not needed - contextmenu infinitely better)
 
 context menu:
-- [ ] post dev reply
+- [x] post dev reply
 
 on_member_join:
 - [x] New Account Role - MemberCog
