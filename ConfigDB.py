@@ -74,6 +74,37 @@ async def get_configs(server: int, keys: list) -> dotdict:
 
     return dotdict(out)
 
+async def get_all_configs(server = None):
+    query = 'SELECT server, key, value FROM config'
+    bind = ()
+    if server:
+        query += ' WHERE server = ?'
+        bind = (server,)
+
+    rows = await sql_query(query, bind)
+    out = {}
+    for row in rows:
+        server, key, value = (row[0], row[1], row[2])
+        if server not in out:
+            # add server dotdict
+            out[server] = dotdict({})
+
+        # plural key means list value
+        if key.endswith('s'):
+            if key not in out[server]:
+                out[server][key] = []
+
+            # try to cast to int
+            try: out[server][key].append(int(value))
+            except: out[server][key].append(value)
+        else:
+            # try to cast to int
+            try: out[server][key] = int(value)
+            except: out[server][key] = value
+
+    return out
+
+
 # update a specific entry
 async def update_config(server: int, key: str, value: str) -> bool:
     query = 'UPDATE config SET value = ? WHERE server = ? AND key = ?'

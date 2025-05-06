@@ -11,6 +11,8 @@ from Cogs.TeamAnswersCog import TeamAnswersCog
 from Cogs.ConfigCog import ConfigCog
 from Cogs.EventCog import EventCog
 
+import ConfigDB
+
 # extend bot class
 class MyBot(commands.Bot):
     def __init__(self, use_cogs):
@@ -20,8 +22,10 @@ class MyBot(commands.Bot):
         super().__init__(command_prefix='¤', intents=intents)
         self.synced = False
         self.use_cogs = use_cogs
+        self.config = {}
 
     async def setup_hook(self):
+        self.config = await ConfigDB.get_all_configs()
         for use_cog in self.use_cogs:
             await self.add_cog(use_cog(self))
 
@@ -36,12 +40,12 @@ class MyBot(commands.Bot):
 
 use_cogs = [
     MiscCog,
-    WikiCog,
-    ReactionsCog,
-    MemberCog,
-    TeamAnswersCog,
+    # WikiCog,
+    # ReactionsCog,
+    # MemberCog,
+    # TeamAnswersCog,
     ConfigCog,
-    EventCog,
+    # EventCog,
 ]
 bot = MyBot(use_cogs)
 bot.run(os.getenv('BOT_TOKEN'))

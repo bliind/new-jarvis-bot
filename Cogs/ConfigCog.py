@@ -8,6 +8,26 @@ class ConfigCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    async def refresh_config(self, guild = None):
+        all_configs = await config.get_all_configs(guild)
+
+        if guild:
+            self.bot.config[guild] = all_configs[guild]
+        else:
+            self.bot.config = all_configs
+
+    @app_commands.command(name='refresh_config', description='Reload the bot configs')
+    async def refresh_config_command(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+
+        try:
+            await self.refresh_config(guild=interaction.guild.id)
+            await interaction.edit_original_response(content='Config updated')
+        except Exception as e:
+            await interaction.edit_original_response(content='Something went wrong, sorry!')
+            print(f'Failed to manually refresh config for {interaction.guild.id}:')
+            print(e)
+
     @app_commands.command(name='show_config_keys', description='Shows config keys')
     async def show_keys_command(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
