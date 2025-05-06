@@ -31,7 +31,7 @@ on_raw_reaction_add:
 - [ ] monitor (still needed?)
 
 on_scheduled_event_create:
-- [ ] add event ID to automod whitelist
+- [x] add event ID to automod whitelist
 
 on_raw_reaction_remove:
 - [ ] monitor (still needed?)

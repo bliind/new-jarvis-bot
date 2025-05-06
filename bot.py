@@ -9,6 +9,7 @@ from Cogs.ReactionsCog import ReactionsCog
 from Cogs.MemberCog import MemberCog
 from Cogs.TeamAnswersCog import TeamAnswersCog
 from Cogs.ConfigCog import ConfigCog
+from Cogs.EventCog import EventCog
 
 # extend bot class
 class MyBot(commands.Bot):
@@ -40,6 +41,7 @@ use_cogs = [
     MemberCog,
     TeamAnswersCog,
     ConfigCog,
+    EventCog,
 ]
 bot = MyBot(use_cogs)
 bot.run(os.getenv('BOT_TOKEN'))
