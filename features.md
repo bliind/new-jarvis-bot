@@ -44,11 +44,11 @@ on_message:
 - [x] moderator tag ask-the-team - TeamAnswersCog
 
 on_message_delete:
-- [ ] team answers
+- [x] team answers
 
 on_message_edit:
 - [x] check caps percent - MiscCog
-- [ ] team answers
+- [x] team answers
 
 on_thread_create:
 - [ ] LFG post checker

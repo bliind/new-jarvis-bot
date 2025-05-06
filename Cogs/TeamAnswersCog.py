@@ -8,6 +8,17 @@ class TeamAnswersCog(commands.Cog):
         self.bot = bot
         self.configs = {}
 
+    def is_message_devreply(self, message: discord.Message, configs: config.dotdict):
+        # make sure is our forum and developer is replying
+        if message.channel.type != discord.ChannelType.public_thread:
+            return False
+        if message.channel.parent.type != discord.ChannelType.forum:
+            return False
+        if message.channel.parent.id not in configs.team_question_channels:
+            return False
+
+        return self.check_member_role(message.author, configs.developer_roles)
+
     def make_embed(self, title, description, color='blue'):
         try: dcolor = getattr(discord.Color, color)
         except: dcolor = discord.Color.blue()
@@ -47,18 +58,32 @@ class TeamAnswersCog(commands.Cog):
         sent = await output_channel.send(embed=embed)
         await sent.publish()
 
-    async def check_devreply(self, message: discord.Message, configs: config.dotdict):
-        # make sure is our forum and developer is replying
-        if message.channel.type != discord.ChannelType.public_thread: return
-        if message.channel.parent.type != discord.ChannelType.forum: return
-        if message.channel.parent.id not in configs.team_question_channels: return
-        if not self.check_member_role(message.author, configs.developer_roles): return
-
+    async def get_thread_open(self, message):
         # get the original message in the thread the dev is posting on
         forum = self.bot.get_channel(message.channel.parent.id)
         thread = forum.get_thread(message.channel.id)
-        async for m in thread.history(limit=1, oldest_first=True):
-            thread_open = m.content
+        async for message in thread.history(limit=1, oldest_first=True):
+            return (thread, message.content)
+
+    async def find_posted_reply(self, message: discord.Message, thread_open: str, configs: config.dotdict):
+        # loop through reply channel to find the answer post
+        team_answer_channel = self.bot.get_channel(configs.team_answer_channel)
+        async for posted in team_answer_channel.history(limit=50):
+            try:
+                # create an embed from the message and ensure we find the same Q/A
+                embed = self.create_devreply_embed(message, thread_open, configs)
+                if embed.title == posted.embeds[0].title \
+                and embed.description == posted.embeds[0].description:
+                    return posted
+            except: pass
+
+    ###
+
+    async def post_new_devreply(self, message: discord.Message, configs: config.dotdict):
+        if not self.is_message_devreply(message, configs):
+            return
+
+        thread, thread_open = await self.get_thread_open(message)
 
         # send dev reply post
         await self.send_devreply_embed(message, thread_open, configs)
@@ -77,6 +102,25 @@ class TeamAnswersCog(commands.Cog):
         thread = forum.get_thread(message.channel.id)
         await thread.add_tags(discord.Object(id=configs.moderator_response_tag))
 
+    async def delete_devreply(self, message: discord.Message, configs: config.dotdict):
+        if not self.is_message_devreply(message, configs):
+            return
+
+        _, thread_open = await self.get_thread_open(message)
+        posted = await self.find_posted_reply(message, thread_open, configs)
+        if posted:
+            await posted.delete()
+
+    async def edit_devreply(self, before: discord.Message, after: discord.Message, configs: config.dotdict):
+        if not self.is_message_devreply(after, configs):
+            return
+
+        _, thread_open = await self.get_thread_open(after)
+        posted = await self.find_posted_reply(before, thread_open, configs)
+        if posted:
+            new_embed = self.create_devreply_embed(after, thread_open, configs)
+            await posted.edit(embed=new_embed)
+
     ###
     ### Events
     @commands.Cog.listener()
@@ -93,17 +137,17 @@ class TeamAnswersCog(commands.Cog):
             'team_question_channels',
         ])
 
-        actions = [
-            'check_devreply',
-            'check_modreply',
-        ]
+        # check for dev replies to watched forums
+        try: await self.post_new_devreply(message, configs)
+        except Exception as e:
+            print('Failed during post_new_devreply:')
+            print(e, message, sep='\n')
 
-        for action in actions:
-            method = getattr(self, action)
-            try: await method(message, configs)
-            except Exception as e:
-                print(f'Failed during {action}:')
-                print(e, message, sep='\n')
+        # check for mod replies to watched forums
+        try: await self.check_modreply(message, configs)
+        except Exception as e:
+            print('Failed during check_modreply:')
+            print(e, message, sep='\n')
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
@@ -111,13 +155,29 @@ class TeamAnswersCog(commands.Cog):
 
         # get all configs to do with edited messages
         configs = await config.get_configs(after.guild.id, [
-            'moderator_roles',
+            'developer_roles',
             'team_answer_channel',
             'team_question_channels',
         ])
+
+        # check for dev reply edit
+        try: await self.edit_devreply(before, after, configs)
+        except Exception as e:
+            print(f'Failed during edit_devreply:')
+            print(e, before, after, sep='\n')
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
         if message.author.bot: return
 
-        configs = await self.load_configs(message.guild.id)
+        configs = await config.get_configs(message.guild.id, [
+            'developer_roles',
+            'team_answer_channel',
+            'team_question_channels',
+        ])
+
+        # check for dev reply deletion
+        try: await self.delete_devreply(message, configs)
+        except Exception as e:
+            print(f'Failed during delete_devreply:')
+            print(e, message, sep='\n')
