@@ -1,59 +1,39 @@
-## feature / todo list
-### if it's not checked it still needs ported
+# Feature List
 
-main:
-- [x] use database for all config
-- [x] separate like-actions into cogs
-- [x] catch and log errors
+- Main:
+  - All config items are housed in a sqlite3 database
+  - Similarly themed actions are grouped together in Cogs
+  - All errors caught and logged to terminal with details
 
-new:
-- [x] commands to change config - ConfigCog
+- ConfigCog:
+  - Handles looking at, modifying, and deleting configuration keys
 
-loops:
-- [x] new account role - MemberCog
-- [x] member role - MemberCog
-- [x] bump archived wiki posts - WikiCog
+- EventCog:
+  - Updates an automod rule to exclude event links from a discord link block rule
 
-commands:
-- [x] ask devs rules - TeamAnswersCog
-- [x] wiki links - WikiCog
-- [ ] post dev reply (not needed - contextmenu infinitely better)
+- ForumCog:
+  - Auto pin OP on thread creation
+  - Alliance recruitment post format check
 
-context menu:
-- [x] post dev reply - TeamAnswersCog
+- MemberCog:
+  - Gives server members a role after a specified amount of hours on the server
+  - Gives fresh discord accounts a role and removes it after the specified age has been reached
 
-on_member_join:
-- [x] New Account Role - MemberCog
+- MiscCog:
+  - Checks posts for too many caps and deletes them with a message
+  - Auto publish new posts in specified announcement channels
 
-on_raw_reaction_add:
-- [x] auto remove  - ReactionsCog
-- [x] reaction role - ReactionsCog
-- [ ] monitor (still needed?)
+- ReactionsCog:
+  - Handles removing country flag reacts in specified channels
+  - Auto removes specified emotes
+  - Adds emotes to new threads in specified forum channels
 
-on_scheduled_event_create:
-- [x] add event ID to automod whitelist - EventCog
+- TeamAnswersCog:
+  - Monitors for developer replies to forum channels and posts them with the question in a designated answers channel
+  - Also monitors for edited or deleted answers and updates the answers channel accordingly
+  - A command (ContextMenu) to manually post a developer reply, in the event it is in a forum we do not monitor
+  - Adds tags to posts with replies from developers or moderators to questions forum channels
 
-on_raw_reaction_remove:
-- [ ] monitor (still needed?)
-
-on_message:
-- [x] cheeky me check - MiscCog
-- [x] check caps percent - MiscCog
-- [x] auto publish - MiscCog
-- [x] team answers - TeamAnswersCog
-- [x] moderator tag ask-the-team - TeamAnswersCog
-
-on_message_delete:
-- [x] team answers - TeamAnswersCog
-
-on_message_edit:
-- [x] check caps percent - MiscCog
-- [x] team answers - TeamAnswersCog
-
-on_thread_create:
-- [x] LFG post checker - ForumCog
-- [x] auto pin - ForumCog
-- [x] add reactions (full/half) - ReactionsCog
-
-on_member_update:
-- [ ] remove booster-related roles when booster removed (is this needed?)
+- WikiCog:
+  - Automatically un-archives threads in specified wiki channel
+  - A command for linking commonly used wiki pages
