@@ -83,7 +83,7 @@ _singular key name means only one entry_
 
 | key | description | used by |
 | --- | --- | --- |
-| moderator_roles | moderator roles | MiscCog |
+| moderator_roles | moderator roles | MiscCog, TeamAnswersCog |
 | caps_prot_immune_channels | channels where caps aren't checked | MiscCog |
 | caps_prot_immune_roles | roles who don't have caps checked | MiscCog |
 | caps_prot_message | message to users who use too many caps | MiscCog |
