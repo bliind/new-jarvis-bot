@@ -14,6 +14,7 @@
 - ForumCog:
   - Auto pin OP on thread creation
   - Alliance recruitment post format check
+  - A slash command for updating the message upon alliance recruitment formatting mismatch
 
 - MemberCog:
   - Gives server members a role after a specified amount of hours on the server
@@ -33,6 +34,8 @@
   - Also monitors for edited or deleted answers and updates the answers channel accordingly
   - A command (ContextMenu) to manually post a developer reply, in the event it is in a forum we do not monitor
   - Adds tags to posts with replies from developers or moderators to questions forum channels
+  - A slash command to allow moderators to post the rules to a forum post
+  - A slash command for updating the rules message sent
 
 - WikiCog:
   - Automatically un-archives threads in specified wiki channel
