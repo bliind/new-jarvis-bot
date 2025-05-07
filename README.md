@@ -12,7 +12,7 @@ but maybe it does stuff you like
   - All errors caught and logged to terminal with details
 
 - ConfigCog:
-  - Handles looking at, modifying, and deleting configuration keys
+  - Handles looking at, modifying, and deleting configuration items
 
 - EventCog:
   - Updates an automod rule to exclude event links from a discord link block rule
