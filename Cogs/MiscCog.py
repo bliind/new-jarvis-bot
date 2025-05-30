@@ -54,7 +54,7 @@ class MiscCog(commands.Cog):
 
         try: await self.cheeky_me_check(message)
         except Exception as e:
-            print(f'Failed checking caps percent:')
+            print(f'Failed doing cheeky me check:')
             print(e, message, sep='\n')
 
         try: await self.check_caps_percent(message)
@@ -64,7 +64,7 @@ class MiscCog(commands.Cog):
 
         try: await self.auto_publish(message)
         except Exception as e:
-            print(f'Failed checking caps percent:')
+            print(f'Failed doing auto publish:')
             print(e, message, sep='\n')
 
     @commands.Cog.listener()
