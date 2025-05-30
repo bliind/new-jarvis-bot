@@ -25,6 +25,7 @@ class ForumCog(commands.Cog):
             else:
                 print('Failed trying to check alliance post:')
                 print(e, thread)
+                return
 
         matches = [re.search(r, thread_open.content, re.MULTILINE | re.IGNORECASE) for r in configs.alliance_post_regexes]
         # if any patterns fail, send message
