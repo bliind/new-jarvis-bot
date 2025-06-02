@@ -9,6 +9,9 @@ class MiscCog(commands.Cog):
         self.bot = bot
 
     async def check_caps_percent(self, message: discord.Message):
+        if message.author.id == self.bot.user.id:
+            return
+
         configs = self.bot.config[message.guild.id]
 
         if message.channel.id in configs.caps_prot_immune_channels:
@@ -49,9 +52,6 @@ class MiscCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        if message.author.bot:
-            return
-
         try: await self.cheeky_me_check(message)
         except Exception as e:
             print(f'Failed doing cheeky me check:')
@@ -69,9 +69,6 @@ class MiscCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
-        if after.author.bot:
-            return
-
         try: await self.check_caps_percent(after)
         except Exception as e:
             print(f'Failed checking caps percent:')
