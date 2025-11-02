@@ -44,6 +44,6 @@ class WikiCog(commands.Cog):
         out = []
         for link in configs.wiki_links:
             title, _ = link.split('|')
-            if title.lower().startswith(current.lower()):
+            if current.lower() in title.lower():
                 out.append(app_commands.Choice(name=title, value=title))
         return out
