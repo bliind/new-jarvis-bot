@@ -52,6 +52,9 @@ class MiscCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
+        if isinstance(message.channel, discord.DMChannel):
+            return
+
         try: await self.cheeky_me_check(message)
         except Exception as e:
             print(f'Failed doing cheeky me check:')
@@ -69,6 +72,9 @@ class MiscCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
+        if isinstance(after.channel, discord.DMChannel):
+            return
+
         try: await self.check_caps_percent(after)
         except Exception as e:
             print(f'Failed checking caps percent:')

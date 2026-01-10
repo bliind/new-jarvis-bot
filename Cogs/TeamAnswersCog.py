@@ -149,6 +149,9 @@ class TeamAnswersCog(commands.Cog):
     ### Events
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
+        if isinstance(message.channel, discord.DMChannel):
+            return
+
         if message.author.bot: return
 
         # check for dev replies to watched forums
@@ -165,22 +168,28 @@ class TeamAnswersCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
+        if isinstance(after.channel, discord.DMChannel):
+            return
+
         if after.author.bot: return
 
         # check for dev reply edit
         try: await self.edit_devreply(before, after)
         except Exception as e:
-            print(f'Failed during edit_devreply:')
+            print('Failed during edit_devreply:')
             print(e, before, after, sep='\n')
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message):
+        if isinstance(message.channel, discord.DMChannel):
+            return
+
         if message.author.bot: return
 
         # check for dev reply deletion
         try: await self.delete_devreply(message)
         except Exception as e:
-            print(f'Failed during delete_devreply:')
+            print('Failed during delete_devreply:')
             print(e, message, sep='\n')
 
     ###

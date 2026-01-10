@@ -18,7 +18,7 @@ class ReactionsCog(commands.Cog):
             or payload.emoji.name in configs.banned_emotes:
             channel = self.bot.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
-            await message.clear_reaction(payload.emoji.name)
+            await message.clear_reaction(payload.emoji)
 
     async def add_emotes(self, thread: discord.Thread):
         configs = self.bot.config[thread.guild.id]
@@ -43,10 +43,13 @@ class ReactionsCog(commands.Cog):
             channel = self.bot.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             user = await self.bot.fetch_user(payload.user_id)
+            role = channel.guild.get_role(configs.reaction_role_role)
+
             # remove the reaction role reaction
             await message.remove_reaction(payload.emoji, user)
             # give the author of the message the role
-            await message.author.add_roles(discord.Object(id=configs.reaction_role_role))
+            print(f'Awarding {message.author} the role {role}')
+            await message.author.add_roles(role)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
