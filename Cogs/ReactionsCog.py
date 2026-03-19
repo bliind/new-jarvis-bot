@@ -35,6 +35,12 @@ class ReactionsCog(commands.Cog):
                     await message.add_reaction(emote)
                     await asyncio.sleep(0.5)
 
+        if thread.parent.id == configs.hot_takes_channel:
+            async for message in thread.history(limit=1, oldest_first=True):
+                for emote in configs.hot_takes_reacts:
+                    await message.add_reaction(emote)
+                    await asyncio.sleep(0.5)
+
     async def reaction_role(self, payload: discord.RawReactionActionEvent):
         configs = self.bot.config[payload.guild_id]
 
