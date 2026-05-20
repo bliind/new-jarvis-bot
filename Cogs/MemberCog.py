@@ -24,8 +24,8 @@ class MemberCog(commands.Cog):
     async def on_ready(self):
         self.check_member_roles.start()
         # don't run the loops at the same time
-        await asyncio.sleep(60)
-        self.check_mute_roles.start()
+        # await asyncio.sleep(60)
+        # self.check_mute_roles.start()
 
     @tasks.loop(seconds=3600)
     async def check_mute_roles(self):
@@ -52,13 +52,12 @@ class MemberCog(commands.Cog):
 
             try:
                 role = server.get_role(configs.member_role)
-                new_acct_role = server.get_role(configs.new_account_role)
+                # new_acct_role = server.get_role(configs.new_account_role)
 
                 if role:
                     members = [m for m in server.members if role not in m.roles]
                     for member in members:
-                        if check_server_age(member, configs.member_hour_count) \
-                        and new_acct_role not in member.roles:
+                        if check_server_age(member, configs.member_hour_count):
                             await member.add_roles(role)
             except Exception as e:
                 print('Failed to check member roles:')
@@ -66,17 +65,17 @@ class MemberCog(commands.Cog):
                 try: print(member)
                 except: pass
 
-    async def check_new_member_age(self, member: discord.Member):
-        configs = self.bot.config[member.guild.id]
+    # async def check_new_member_age(self, member: discord.Member):
+    #     configs = self.bot.config[member.guild.id]
 
-        if not check_member_age(member, configs.new_account_day_count):
-            role = member.guild.get_role(configs.new_account_role)
-            await member.add_roles(role)
+    #     if not check_member_age(member, configs.new_account_day_count):
+    #         role = member.guild.get_role(configs.new_account_role)
+    #         await member.add_roles(role)
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member: discord.Member):
-        # check for newly joined members with fresh discord accounts
-        try: await self.check_new_member_age(member)
-        except Exception as e:
-            print('Error checking new member age:')
-            print(e, member)
+    # @commands.Cog.listener()
+    # async def on_member_join(self, member: discord.Member):
+    #     # check for newly joined members with fresh discord accounts
+    #     try: await self.check_new_member_age(member)
+    #     except Exception as e:
+    #         print('Error checking new member age:')
+    #         print(e, member)
