@@ -2,7 +2,7 @@ import re
 import asyncio
 import discord
 from discord import app_commands
-from discord.ext import commands
+from discord.ext import commands, tasks
 from Modals.ConfigParagraphModal import ConfigParagraphModal
 import ConfigDB
 
@@ -51,6 +51,28 @@ class ForumCog(commands.Cog):
                     print('Failed to auto-pin OP:')
                     print(e, thread, sep='\n')
 
+    @tasks.loop(hours=24)
+    async def bump_pinned_threads(self):
+        for server in self.bot.guilds:
+            configs = self.bot.config[server.id]
+
+            try:
+                for thread_link in configs.reopen_threads:
+                    link_parts = thread_link.split('/')
+                    thread_id = link_parts[-1]
+                    guild_id = link_parts[-2]
+
+                    try:
+                        guild = self.bot.get_guild(guild_id) or await self.bot.fetch_guild(guild_id)
+                        thread = guild.get_thread(thread_id) or await guild.fetch_channel(thread_id)
+
+                        bump_msg = await thread.send('.')
+                        await bump_msg.delete()
+                    except Exception as ex:
+                        print(ex)
+            except Exception as e:
+                print(e)
+
     ###
     ### Events
     @commands.Cog.listener()
@@ -67,6 +89,10 @@ class ForumCog(commands.Cog):
         except Exception as e:
             print('Failed trying to check alliance post:')
             print(e, thread, sep='\n')
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.bump_pinned_threads.start()
 
     ###
     ### Slash commands
